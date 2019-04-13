@@ -11,7 +11,7 @@ const initialRegion = {
   longitudeDelta: 0.02
 };
 
-const markers = [
+const defaultMarkers = [
   {
     name: "boxer",
     latitude: -37.811524,
@@ -163,9 +163,34 @@ export default class HomeScreen extends React.Component {
     super(props);
     this.state = {
       ...initialRegion,
-      markers
+      markers: []
     };
     console.log(this.state);
+  }
+
+  async componentDidMount() {
+    console.log("Fetching data");
+    try {
+      const response = await fetch(
+        "https://graffite-api-backend.herokuapp.com/street-art"
+      );
+      const json = await response.json();
+      console.log("Fetched data");
+      console.log(json);
+      let markers = [];
+      json.forEach(element => {
+        console.log(element);
+        let key = Object.keys(element)[0];
+        let obj = element[key];
+        console.log("This is the object");
+        console.log(obj);
+        markers.push(obj);
+      });
+      this.setState({ markers: markers });
+    } catch {
+      this.setState({ markers: defaultMarkers });
+      console.log("Could not fetch data");
+    }
   }
 
   render() {
