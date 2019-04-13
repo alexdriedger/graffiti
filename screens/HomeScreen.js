@@ -8,7 +8,9 @@ import {
   View
 } from "react-native";
 import MapViewDirections from "react-native-maps-directions";
-import { MapView, Location, Permissions } from "expo";
+import { MapView, OverlayComponent, Location, Permissions } from "expo";
+import ActionButton from "react-native-action-button";
+import { MaterialIcons } from "@expo/vector-icons";
 
 import CustomMarker from "../components/CustomMarker";
 import MapMarker from "../components/MapMarker";
@@ -219,6 +221,7 @@ export default class HomeScreen extends React.Component {
     this.state = {
       ...initialRegion,
       markers: [],
+      markersById: {},
       waypoints: null
     };
     console.log(this.state);
@@ -237,49 +240,110 @@ export default class HomeScreen extends React.Component {
       console.log("Failed to fetch data");
       json = defaultMarkers;
     }
-    console.log(json);
+    // console.log(json);
     let markers = [];
+    let markersById = {};
     json.forEach(element => {
-      console.log(element);
+      // console.log(element);
       let key = Object.keys(element)[0];
       let obj = element[key];
-      console.log("This is the object");
-      console.log(obj);
+      // console.log("This is the object");
+      // console.log(obj);
       markers.push(obj);
+      markersById[key] = obj;
     });
-    this.setState({ markers: markers });
+    this.setState({ markers: markers, markersById: markersById });
+    console.log("markersById");
+    console.log(this.state.markersById);
   }
 
   render() {
     return (
-      <MapView
-        showsUserLocation
-        style={{ flex: 1 }}
-        region={{
-          latitude: this.state.latitude,
-          longitude: this.state.longitude,
-          latitudeDelta: this.state.latitudeDelta,
-          longitudeDelta: this.state.longitudeDelta
-        }}
-      >
-        {this._renderDirections()}
+      <View style={{ flex: 1, alignItems: "center" }}>
+        <MapView
+          showsUserLocation
+          style={{ ...StyleSheet.absoluteFillObject }}
+          region={{
+            latitude: this.state.latitude,
+            longitude: this.state.longitude,
+            latitudeDelta: this.state.latitudeDelta,
+            longitudeDelta: this.state.longitudeDelta
+          }}
+        >
+          {this._renderDirections(this.state.waypoints)}
 
-        {this.state.markers.map((m, index) => (
-          <MapMarker
-            coordinate={{
-              latitude: m.latitude,
-              longitude: m.longitude
-            }}
-            title={m.name}
-            description={m.description}
-            key={index}
+          {this.state.markers.map((m, index) => (
+            <MapMarker
+              coordinate={{
+                latitude: m.latitude,
+                longitude: m.longitude
+              }}
+              title={m.name}
+              description={m.description}
+              key={index}
+            >
+              <CustomMarker image_url={m.image_url} />
+            </MapMarker>
+          ))}
+        </MapView>
+        <ActionButton
+          buttonColor="rgba(231,76,60,1)"
+          renderIcon={() => (
+            <MaterialIcons name="navigation" size={32} color="white" />
+          )}
+        >
+          <ActionButton.Item
+            buttonColor="#9b59b6"
+            title="Custom Tour"
+            onPress={() => console.log("Custom Tour button pressed")}
           >
-            <CustomMarker image_url={m.image_url} />
-          </MapMarker>
-        ))}
-      </MapView>
+            <MaterialIcons name="mood" size={32} color="white" />
+          </ActionButton.Item>
+          <ActionButton.Item
+            buttonColor="#3498db"
+            title="CBD Tour"
+            onPress={() =>
+              this._getWaypoints(["201", "202", "203", "204", "12", "15", "14"])
+            }
+          >
+            <MaterialIcons name="business" size={32} color="white" />
+          </ActionButton.Item>
+          <ActionButton.Item
+            buttonColor="#1abc9c"
+            title="Fitzroy Tour"
+            onPress={() => {}}
+          >
+            <MaterialIcons name="store" size={32} color="white" />
+          </ActionButton.Item>
+        </ActionButton>
+      </View>
     );
   }
+
+  _getWaypoints(points) {
+    console.log("getWaypoints state");
+    console.log(this.state.markersById);
+    let waypoints = points.map(p => {
+      return {
+        latitude: this.state.markersById[p].latitude,
+        longitude: this.state.markersById[p].longitude
+      };
+    });
+    console.log("waypoints");
+    console.log(waypoints);
+    this.setState({ waypoints: waypoints });
+  }
+
+  /*
+<View
+          style={{
+            position: "absolute",
+            backgroundColor: "blue",
+            width: 50,
+            height: 50
+          }}
+        />
+  */
 
   componentWillMount() {
     this._getLocationAsync();
@@ -289,18 +353,12 @@ export default class HomeScreen extends React.Component {
     if (waypoints !== null) {
       return (
         <MapViewDirections
-          origin={{
-            latitude: this.state.latitude,
-            longitude: this.state.longitude
-          }}
-          destination={{
-            latitude: this.state.latitude,
-            longitude: this.state.longitude
-          }}
-          waypoints={this.state.waypoints}
+          origin={waypoints[0]}
+          destination={waypoints[0]}
+          waypoints={waypoints}
           mode={"walking"}
           apikey={"AIzaSyDebH3jJ_9Z7i-22j9AQZuJYZG5apEJobc"}
-          strokeWidth={3}
+          strokeWidth={5}
           strokeColor="#4A89F3"
         />
       );
