@@ -2,11 +2,6 @@ import React from "react";
 import { View, Image } from "react-native";
 
 export default class CustomMarker extends React.Component {
-  constructor(props) {
-    super(props);
-    console.log("Custom Marker constructor");
-  }
-
   render() {
     return (
       <View>
@@ -18,7 +13,7 @@ export default class CustomMarker extends React.Component {
             borderColor: "#4A89F3",
             borderWidth: 2
           }}
-          source={this.props.image_url}
+          source={{ uri: this.props.image_url }}
         />
       </View>
     );

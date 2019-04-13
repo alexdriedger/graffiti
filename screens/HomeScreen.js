@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import MapViewDirections from 'react-native-maps-directions';
+import MapViewDirections from "react-native-maps-directions";
 import { MapView, Location, Permissions } from "expo";
 
 import CustomMarker from "../components/CustomMarker";
@@ -20,169 +20,234 @@ const initialRegion = {
   longitudeDelta: 0.02
 };
 
-const markers = [
+const defaultMarkers = [
   {
-    name: "boxer",
-    latitude: -37.811524,
-    longitude: 144.959319,
-    description: "punching boxer",
-    time_created: 155123844,
-    image_url: require("../assets/images/boxer.jpg"),
-    rating: 6
+    "1": {
+      id: 1,
+      name: "Boxer",
+      latitude: -37.811524,
+      longitude: 144.959319,
+      description: "punching boxer",
+      time_created: 155123844,
+      image_url: "https://i.imgur.com/tXr0IbB.jpg",
+      rating: 6
+    }
   },
   {
-    name: "hidden lady",
-    latitude: -37.815864,
-    longitude: 144.962366,
-    description: "lady peering through curtain",
-    time_created: 155123844,
-    image_url: require("../assets/images/lady.jpg"),
-    rating: 8
+    "2": {
+      id: 2,
+      name: "Hidden Lady",
+      latitude: -37.815864,
+      longitude: 144.962366,
+      description: "lady peering through curtain",
+      time_created: 155123844,
+      image_url: "https://i.imgur.com/WvGqsf2.jpg",
+      rating: 8
+    }
   },
   {
-    name: "alien",
-    latitude: -37.815542,
-    longitude: 144.962495,
-    description: "pill eating alien",
-    time_created: 155123844,
-    image_url: require("../assets/images/alien.jpg"),
-    rating: 25
+    "3": {
+      id: 3,
+      name: "Alien",
+      latitude: -37.815542,
+      longitude: 144.962495,
+      description: "pill eating alien",
+      time_created: 155123844,
+      image_url: "https://i.imgur.com/J8Gnvdo.jpg",
+      rating: 25
+    }
   },
   {
-    name: "staring at you",
-    latitude: -37.814813,
-    longitude: 144.956658,
-    description: "lady staring",
-    time_created: 155123844,
-    image_url: require("../assets/images/lady.jpg"),
-    rating: 3
+    "4": {
+      id: 4,
+      name: "Staring at you",
+      latitude: -37.814813,
+      longitude: 144.956658,
+      description: "lady staring",
+      time_created: 155123844,
+      image_url: "https://i.imgur.com/WvGqsf2.jpg",
+      rating: 3
+    }
   },
   {
-    name: "weird elephant",
-    latitude: -37.812575,
-    longitude: 144.956122,
-    description: "freaky lookin elephant",
-    time_created: 155123844,
-    image_url: require("../assets/images/elephant.jpg"),
-    rating: 25
+    "5": {
+      id: 5,
+      name: "Weird Elephant",
+      latitude: -37.812575,
+      longitude: 144.956122,
+      description: "Freaky lookin elephant",
+      time_created: 155123844,
+      image_url: "https://i.imgur.com/4qAfwDT.jpg",
+      rating: 25
+    }
   },
   {
-    name: "sick asian",
-    latitude: -37.815491,
-    longitude: 144.95612,
-    description: "big looking asian dude",
-    time_created: 155123844,
-    image_url: require("../assets/images/asian_guy.jpg"),
-    rating: 100
+    "6": {
+      id: 6,
+      name: "Sick Asian",
+      latitude: -37.815491,
+      longitude: 144.95612,
+      description: "big looking asian dude",
+      time_created: 155123844,
+      image_url: "https://i.imgur.com/LJQLur8.jpg",
+      rating: 100
+    }
   },
   {
-    name: "buzz buzz",
-    latitude: -37.813863,
-    longitude: 144.95507,
-    description: "flying bees",
-    time_created: 155123844,
-    image_url: require("../assets/images/bee.jpg"),
-    rating: 12
+    "7": {
+      id: 7,
+      name: "Buzz Buzz",
+      latitude: -37.813863,
+      longitude: 144.95507,
+      description: "flying bees",
+      time_created: 155123844,
+      image_url: "https://i.imgur.com/GCdZnSu.jpg",
+      rating: 12
+    }
   },
   {
-    name: "flaming goddess",
-    latitude: -37.81694,
-    longitude: 144.962881,
-    description: "portrait of woman",
-    time_created: 155123844,
-    image_url: require("../assets/images/lady.jpg"),
-    rating: 1
+    "8": {
+      id: 8,
+      name: "Flaming Goddess",
+      latitude: -37.81694,
+      longitude: 144.962881,
+      description: "portrait of woman",
+      time_created: 155123844,
+      image_url: "https://i.imgur.com/2xVXNIb.jpg",
+      rating: 1
+    }
   },
   {
-    name: "rainbow head",
-    latitude: -37.818771,
-    longitude: 144.961218,
-    description: "ring of rainbows",
-    time_created: 155123844,
-    image_url: require("../assets/images/rainbow.jpg"),
-    rating: 250
+    "9": {
+      id: 9,
+      name: "Rainbow Head",
+      latitude: -37.818771,
+      longitude: 144.961218,
+      description: "ring of rainbows",
+      time_created: 155123844,
+      image_url: "https://imgur.com/J8Gnvdo.jpg",
+      rating: 250
+    }
   },
   {
-    name: "tired old people",
-    latitude: -37.817754,
-    longitude: 144.954191,
-    description: "Elderly couple",
-    time_created: 155123844,
-    image_url: require("../assets/images/old_people.jpg"),
-    rating: 250
+    "10": {
+      id: 10,
+      name: "Tired Old People",
+      latitude: -37.817754,
+      longitude: 144.954191,
+      description: "Elderly couple",
+      time_created: 155123844,
+      image_url: "https://i.imgur.com/BulWNDa.jpg",
+      rating: 250
+    }
   },
   {
-    name: "cool koala",
-    latitude: 37.821144,
-    longitude: 144.956154,
-    description: "Koala portrait",
-    time_created: 155123844,
-    image_url: require("../assets/images/koala.jpg"),
-    rating: 300
+    "11": {
+      id: 11,
+      name: "Cool Koala",
+      latitude: 37.821144,
+      longitude: 144.956154,
+      description: "Koala portrait",
+      time_created: 155123844,
+      image_url: "https://i.imgur.com/KFFypYn.jpg",
+      rating: 300
+    }
   },
   {
-    name: "topping up",
-    latitude: -37.81722,
-    longitude: 144.966132,
-    description: "girl filling up water bucket",
-    time_created: 155123844,
-    image_url: require("../assets/images/water_filling.jpg"),
-    rating: 301
+    "12": {
+      id: 12,
+      name: "Monsters Incorporated",
+      latitude: -37.815321,
+      longitude: 144.965263,
+      description: "monsters inc character",
+      time_created: 155123844,
+      image_url: "https://imgur.com/1KAS43H.jpg",
+      rating: 30
+    }
   },
   {
-    name: "me and my homies",
-    latitude: -37.814898,
-    longitude: 144.974028,
-    description: "a couple of kids dressed as batman",
-    time_created: 155123844,
-    image_url: require("../assets/images/da_boys.jpg"),
-    rating: 350
+    "13": {
+      id: 13,
+      name: "Topping Up",
+      latitude: -37.81722,
+      longitude: 144.966132,
+      description: "girl filling up water bucket",
+      time_created: 155123844,
+      image_url: "https://i.imgur.com/Y1j74ud.jpg",
+      rating: 301
+    }
   },
   {
-    name: "indigenous child",
-    latitude: -37.813033,
-    longitude: 144.972398,
-    description: "portrait of an indigenous Australian child",
-    time_created: 155123844,
-    image_url: require("../assets/images/indigenous.jpg"),
-    rating: 67
+    "14": {
+      id: 14,
+      name: "Me And My Homies",
+      latitude: -37.814898,
+      longitude: 144.974028,
+      description: "a couple of kids dressed as batman",
+      time_created: 155123844,
+      image_url: "https://i.imgur.com/IrSVWiI.jpg",
+      rating: 350
+    }
   },
   {
-    name: "Hosier Lane",
-    latitude: -37.816215,
-    longitude: 144.969009,
-    image_url: require("../assets/images/hosier_lane.jpg"),
-    description: "One of the most well known street art locations"
-  },
-  {
-    name: "AC/DC Lane",
-    latitude: -37.815739,
-    longitude: 144.970971,
-    image_url: require("../assets/images/acdc_lane.jpg"),
-    description: "Fun street art themed after AC/DC"
+    "15": {
+      id: 15,
+      name: "Indigenous Child",
+      latitude: -37.813033,
+      longitude: 144.972398,
+      description: "Indigenous Child",
+      time_created: 155123844,
+      image_url: "https://imgur.com/QnoAtUf.jpg",
+      rating: 67
+    }
   }
 ];
 
 export default class HomeScreen extends React.Component {
-
   static navigationOptions = {
     header: null
   };
 
   constructor(props) {
     super(props);
-    let waypoints = markers.slice(0, 4).map((m) => {
-      return {
-        latitude: m.latitude,
-        longitude: m.longitude
-      };
-    });
+    // let waypoints = markers.slice(0, 4).map(m => {
+    //   return {
+    //     latitude: m.latitude,
+    //     longitude: m.longitude
+    //   };
+    // });
     this.state = {
       ...initialRegion,
-      markers,
-      waypoints
+      markers: [],
+      waypoints: null
     };
     console.log(this.state);
+  }
+
+  async componentDidMount() {
+    console.log("Fetching data");
+    let json = null;
+    try {
+      const response = await fetch(
+        "https://graffite-api-backend.herokuapp.com/street-art"
+      );
+      json = await response.json();
+      console.log("Fetched data Successfully");
+    } catch {
+      console.log("Failed to fetch data");
+      json = defaultMarkers;
+    }
+    console.log(json);
+    let markers = [];
+    json.forEach(element => {
+      console.log(element);
+      let key = Object.keys(element)[0];
+      let obj = element[key];
+      console.log("This is the object");
+      console.log(obj);
+      markers.push(obj);
+    });
+    this.setState({ markers: markers });
   }
 
   render() {
@@ -197,17 +262,8 @@ export default class HomeScreen extends React.Component {
           longitudeDelta: this.state.longitudeDelta
         }}
       >
+        {this._renderDirections()}
 
-        <MapViewDirections
-          origin={{latitude: this.state.latitude, longitude: this.state.longitude}}
-          destination={{latitude: this.state.latitude, longitude: this.state.longitude}}
-          waypoints={this.state.waypoints}
-          mode={"walking"}
-          apikey={"AIzaSyDebH3jJ_9Z7i-22j9AQZuJYZG5apEJobc"}
-          strokeWidth={3}
-          strokeColor="#4A89F3"
-        />
-        
         {this.state.markers.map((m, index) => (
           <MapMarker
             coordinate={{
@@ -227,6 +283,28 @@ export default class HomeScreen extends React.Component {
 
   componentWillMount() {
     this._getLocationAsync();
+  }
+
+  _renderDirections(waypoints) {
+    if (waypoints !== null) {
+      return (
+        <MapViewDirections
+          origin={{
+            latitude: this.state.latitude,
+            longitude: this.state.longitude
+          }}
+          destination={{
+            latitude: this.state.latitude,
+            longitude: this.state.longitude
+          }}
+          waypoints={this.state.waypoints}
+          mode={"walking"}
+          apikey={"AIzaSyDebH3jJ_9Z7i-22j9AQZuJYZG5apEJobc"}
+          strokeWidth={3}
+          strokeColor="#4A89F3"
+        />
+      );
+    }
   }
 
   _getLocationAsync = async () => {
