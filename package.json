@@ -12,10 +12,19 @@
   },
   "dependencies": {
     "@expo/samples": "2.1.1",
+    "a": "^2.1.2",
+    "app.": "0.0.6",
+    "browser": "^0.2.6",
     "expo": "^32.0.0",
-    "react": "16.5.0",
+    "for": "^0.1.0",
+    "react": "^16.5.0",
+    "react-dom": "^16.8.6",
+    "react-grid-gallery": "^0.5.4",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
-    "react-navigation": "^3.0.9"
+    "react-native-image-grid": "^1.0.0",
+    "react-navigation": "^3.0.9",
+    "react-router-dom": "^5.0.0",
+    "react-rpg": "^2.0.0"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0",
