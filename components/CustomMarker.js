@@ -1,13 +1,5 @@
 import React from "react";
-import { View, Text, Image } from "react-native";
-import { blue } from "ansi-colors";
-
-/*
-<Image
-  style={{ height: 50, width: 50 }}
-  source={require(this.props.image)}
-/>
-*/
+import { View, Image } from "react-native";
 
 export default class CustomMarker extends React.Component {
   constructor(props) {
