@@ -311,7 +311,7 @@ export default class HomeScreen extends React.Component {
           <ActionButton.Item
             buttonColor="#1abc9c"
             title="Fitzroy Tour"
-            onPress={() => {}}
+            onPress={() => this._getWaypoints(["101", "102", "103", "104"])}
           >
             <MaterialIcons name="store" size={32} color="white" />
           </ActionButton.Item>
@@ -331,7 +331,13 @@ export default class HomeScreen extends React.Component {
     });
     console.log("waypoints");
     console.log(waypoints);
-    this.setState({ waypoints: waypoints });
+    this.setState({
+      waypoints: waypoints,
+      latitude: waypoints[0].latitude,
+      longitude: waypoints[0].longitude,
+      latitudeDelta: 0.03,
+      longitudeDelta: 0.01
+    });
   }
 
   /*
