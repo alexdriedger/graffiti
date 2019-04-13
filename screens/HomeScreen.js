@@ -247,14 +247,15 @@ export default class HomeScreen extends React.Component {
       // console.log(element);
       let key = Object.keys(element)[0];
       let obj = element[key];
+      obj["visible"] = true;
       // console.log("This is the object");
       // console.log(obj);
       markers.push(obj);
       markersById[key] = obj;
     });
     this.setState({ markers: markers, markersById: markersById });
-    console.log("markersById");
-    console.log(this.state.markersById);
+    // console.log("markersById");
+    // console.log(this.state.markersById);
   }
 
   render() {
@@ -271,20 +272,7 @@ export default class HomeScreen extends React.Component {
           }}
         >
           {this._renderDirections(this.state.waypoints)}
-
-          {this.state.markers.map((m, index) => (
-            <MapMarker
-              coordinate={{
-                latitude: m.latitude,
-                longitude: m.longitude
-              }}
-              title={m.name}
-              description={m.description}
-              key={index}
-            >
-              <CustomMarker image_url={m.image_url} />
-            </MapMarker>
-          ))}
+          {this._renderMarkers(this.state.markersById)}
         </MapView>
         <ActionButton
           buttonColor="rgba(231,76,60,1)"
@@ -329,6 +317,14 @@ export default class HomeScreen extends React.Component {
         longitude: this.state.markersById[p].longitude
       };
     });
+
+    // Make other points invisible
+    let toBeInvisible = { ...this.state.markersById };
+    for (id in toBeInvisible) {
+      toBeInvisible[id].visible = false;
+    }
+    points.forEach(p => (toBeInvisible[p].visible = true));
+
     console.log("waypoints");
     console.log(waypoints);
     this.setState({
@@ -336,20 +332,10 @@ export default class HomeScreen extends React.Component {
       latitude: waypoints[0].latitude,
       longitude: waypoints[0].longitude,
       latitudeDelta: 0.03,
-      longitudeDelta: 0.01
+      longitudeDelta: 0.01,
+      markersById: toBeInvisible
     });
   }
-
-  /*
-<View
-          style={{
-            position: "absolute",
-            backgroundColor: "blue",
-            width: 50,
-            height: 50
-          }}
-        />
-  */
 
   componentWillMount() {
     this._getLocationAsync();
@@ -369,6 +355,32 @@ export default class HomeScreen extends React.Component {
         />
       );
     }
+  }
+
+  _renderMarkers(markersById) {
+    let visible = [];
+    if (Object.keys(markersById).length !== 0) {
+      for (key in markersById) {
+        let o = markersById[key];
+        if (o["visible"]) {
+          visible.push(o);
+        }
+      }
+    }
+
+    return visible.map((m, index) => (
+      <MapMarker
+        coordinate={{
+          latitude: m.latitude,
+          longitude: m.longitude
+        }}
+        title={m.name}
+        description={m.description}
+        key={index}
+      >
+        <CustomMarker image_url={m.image_url} />
+      </MapMarker>
+    ));
   }
 
   _getLocationAsync = async () => {
