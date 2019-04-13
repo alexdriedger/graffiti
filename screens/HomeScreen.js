@@ -171,9 +171,16 @@ export default class HomeScreen extends React.Component {
 
   constructor(props) {
     super(props);
+    let waypoints = markers.slice(0, 4).map((m) => {
+      return {
+        latitude: m.latitude,
+        longitude: m.longitude
+      };
+    });
     this.state = {
       ...initialRegion,
-      markers
+      markers,
+      waypoints
     };
     console.log(this.state);
   }
@@ -192,14 +199,13 @@ export default class HomeScreen extends React.Component {
       >
 
         <MapViewDirections
-          origin={{latitude: -37.801725, longitude: 144.958462}}
-          destination={{latitude: -37.801725, longitude: 144.958462}}
-          waypoints={[{latitude: -37.800406, longitude: 144.963822}, {latitude: -37.802353, longitude: 144.962223}]}
+          origin={{latitude: this.state.latitude, longitude: this.state.longitude}}
+          destination={{latitude: this.state.latitude, longitude: this.state.longitude}}
+          waypoints={this.state.waypoints}
           mode={"walking"}
-          optimizeWaypoints={true}
           apikey={"AIzaSyDebH3jJ_9Z7i-22j9AQZuJYZG5apEJobc"}
           strokeWidth={3}
-          strokeColor="hotpink"
+          strokeColor="#4A89F3"
         />
         
         {this.state.markers.map((m, index) => (
