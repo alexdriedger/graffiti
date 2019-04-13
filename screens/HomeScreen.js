@@ -1,4 +1,13 @@
 import React from "react";
+import {
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native";
+import MapViewDirections from 'react-native-maps-directions';
 import { MapView, Location, Permissions } from "expo";
 
 import CustomMarker from "../components/CustomMarker";
@@ -155,15 +164,23 @@ const markers = [
 ];
 
 export default class HomeScreen extends React.Component {
+
   static navigationOptions = {
     header: null
   };
 
   constructor(props) {
     super(props);
+    let waypoints = markers.slice(0, 4).map((m) => {
+      return {
+        latitude: m.latitude,
+        longitude: m.longitude
+      };
+    });
     this.state = {
       ...initialRegion,
-      markers
+      markers,
+      waypoints
     };
     console.log(this.state);
   }
@@ -180,6 +197,17 @@ export default class HomeScreen extends React.Component {
           longitudeDelta: this.state.longitudeDelta
         }}
       >
+
+        <MapViewDirections
+          origin={{latitude: this.state.latitude, longitude: this.state.longitude}}
+          destination={{latitude: this.state.latitude, longitude: this.state.longitude}}
+          waypoints={this.state.waypoints}
+          mode={"walking"}
+          apikey={"AIzaSyDebH3jJ_9Z7i-22j9AQZuJYZG5apEJobc"}
+          strokeWidth={3}
+          strokeColor="#4A89F3"
+        />
+        
         {this.state.markers.map((m, index) => (
           <MapMarker
             coordinate={{
