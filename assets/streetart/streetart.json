@@ -1,0 +1,125 @@
+{
+  "streetart": [
+    {
+      "name": "boxer",
+      "latitude": -37.811524,
+      "longitude": 144.959319,
+      "description": "punching boxer",
+      "time_created": 155123844,
+      "image_url": "assets/images/boxer.jpg",
+      "rating": 6
+    }, {
+      "name": "hidden lady",
+      "latitude": -37.815864,
+      "longitude": 144.962366,
+      "description": "lady peering through curtain",
+      "time_created": 155123844,
+      "image_url": "assets/images/lady.jpg",
+      "rating": 8
+    }, {
+      "name": "alien",
+      "latitude": -37.815542,
+      "longitude": 144.962495,
+      "description": "pill eating alien",
+      "time_created": 155123844,
+      "image_url": "assets/images/alien.jpg",
+      "rating": 25
+    }, {
+      "name": "staring at you",
+      "latitude": -37.814813,
+      "longitude": 144.956658,
+      "description": "lady staring",
+      "time_created": 155123844,
+      "image_url": "assets/images/lady.jpg",
+      "rating": 3
+    }, {
+      "name": "weird elephant",
+      "latitude": -37.812575, 
+      "longitude": 144.956122,
+      "description": "freaky lookin elephant",
+      "time_created": 155123844,
+      "image_url": "assets/images/elephant.jpg",
+      "rating": 25
+    }, {
+      "name": "sick asian",
+      "latitude": -37.815491,  
+      "longitude": 144.95612,
+      "description": "big looking asian dude",
+      "time_created": 155123844,
+      "image_url": "assets/images/asian_guy.jpg",
+      "rating": 100
+    }, {
+      "name": "buzz buzz",
+      "latitude": -37.813863,   
+      "longitude": 144.955070,
+      "description": "flying bees",
+      "time_created": 155123844,
+      "image_url": "assets/images/bee.jpg",
+      "rating": 12
+    }, {
+      "name": "flaming goddess",
+      "latitude": -37.816940,   
+      "longitude": 144.962881,
+      "description": "portrait of woman",
+      "time_created": 155123844,
+      "image_url": "assets/images/lady.jpg",
+      "rating": 1
+    }, {
+      "name": "rainbow head",
+      "latitude": -37.818771,    
+      "longitude": 144.961218,
+      "description": "ring of rainbows",
+      "time_created": 155123844,
+      "image_url": "assets/images/rainbow.jpg",
+      "rating": 250
+    }, {
+      "name": "tired old people",
+      "latitude": -37.817754,    
+      "longitude": 144.954191,
+      "description": "Elderly couple",
+      "time_created": 155123844,
+      "image_url": "assets/images/old_people.jpg",
+      "rating": 250
+    }, {
+      "name": "cool koala",
+      "latitude": 37.821144,    
+      "longitude": 144.956154,
+      "description": "Koala portrait",
+      "time_created": 155123844,
+      "image_url": "assets/images/koala.jpg",
+      "rating": 300
+    }, {
+      "name": "monsters incorporated",
+      "latitude": -37.815321,     
+      "longitude": 144.965263,
+      "description": "monsters inc character",
+      "time_created": 155123844,
+      "image_url": "assets/images/monsters_inc.jpg",
+      "rating": 30
+    }, { 
+      "name": "topping up",
+      "latitude": -37.817220,     
+      "longitude": 144.966132,
+      "description": "girl filling up water bucket",
+      "time_created": 155123844,
+      "image_url": "assets/images/water_filling.jpg",
+      "rating": 301
+    }, {
+      "name": "me and my homies",
+      "latitude": -37.814898,      
+      "longitude": 144.974028,
+      "description": "a couple of kids dressed as batman",
+      "time_created": 155123844,
+      "image_url": "assets/images/da_boys.jpg",
+      "rating": 350
+    }, {
+      "name": "indigenous child",
+      "latitude": -37.813033,      
+      "longitude": 144.972398,
+      "description": "portrait of an indigenous Australian child",
+      "time_created": 155123844,
+      "image_url": "assets/images/indigenous.jpg",
+      "rating": 67
+    }
+  ]
+}
