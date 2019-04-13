@@ -1,20 +1,8 @@
 import React from "react";
-import { Image, View, Text } from "react-native";
 import { MapView, Location, Permissions } from "expo";
-import { Marker, Callout } from "react-native-maps";
 
-import CustomCallout from "../components/CustomCallout";
 import CustomMarker from "../components/CustomMarker";
-
-/*
-<Image
-                  style={{ height: 50, width: 50 }}
-                  source={require(marker.image_url)}
-                  source={require("../assets/images/acdc_lane.jpg")}
-                />
-*/
-
-// const image = require("../assets/images/acdc_lane.jpg");
+import MapMarker from "../components/MapMarker";
 
 const initialRegion = {
   latitude: -37.804212,
@@ -24,6 +12,132 @@ const initialRegion = {
 };
 
 const markers = [
+  {
+    name: "boxer",
+    latitude: -37.811524,
+    longitude: 144.959319,
+    description: "punching boxer",
+    time_created: 155123844,
+    image_url: require("../assets/images/boxer.jpg"),
+    rating: 6
+  },
+  {
+    name: "hidden lady",
+    latitude: -37.815864,
+    longitude: 144.962366,
+    description: "lady peering through curtain",
+    time_created: 155123844,
+    image_url: require("../assets/images/lady.jpg"),
+    rating: 8
+  },
+  {
+    name: "alien",
+    latitude: -37.815542,
+    longitude: 144.962495,
+    description: "pill eating alien",
+    time_created: 155123844,
+    image_url: require("../assets/images/alien.jpg"),
+    rating: 25
+  },
+  {
+    name: "staring at you",
+    latitude: -37.814813,
+    longitude: 144.956658,
+    description: "lady staring",
+    time_created: 155123844,
+    image_url: require("../assets/images/lady.jpg"),
+    rating: 3
+  },
+  {
+    name: "weird elephant",
+    latitude: -37.812575,
+    longitude: 144.956122,
+    description: "freaky lookin elephant",
+    time_created: 155123844,
+    image_url: require("../assets/images/elephant.jpg"),
+    rating: 25
+  },
+  {
+    name: "sick asian",
+    latitude: -37.815491,
+    longitude: 144.95612,
+    description: "big looking asian dude",
+    time_created: 155123844,
+    image_url: require("../assets/images/asian_guy.jpg"),
+    rating: 100
+  },
+  {
+    name: "buzz buzz",
+    latitude: -37.813863,
+    longitude: 144.95507,
+    description: "flying bees",
+    time_created: 155123844,
+    image_url: require("../assets/images/bee.jpg"),
+    rating: 12
+  },
+  {
+    name: "flaming goddess",
+    latitude: -37.81694,
+    longitude: 144.962881,
+    description: "portrait of woman",
+    time_created: 155123844,
+    image_url: require("../assets/images/lady.jpg"),
+    rating: 1
+  },
+  {
+    name: "rainbow head",
+    latitude: -37.818771,
+    longitude: 144.961218,
+    description: "ring of rainbows",
+    time_created: 155123844,
+    image_url: require("../assets/images/rainbow.jpg"),
+    rating: 250
+  },
+  {
+    name: "tired old people",
+    latitude: -37.817754,
+    longitude: 144.954191,
+    description: "Elderly couple",
+    time_created: 155123844,
+    image_url: require("../assets/images/old_people.jpg"),
+    rating: 250
+  },
+  {
+    name: "cool koala",
+    latitude: 37.821144,
+    longitude: 144.956154,
+    description: "Koala portrait",
+    time_created: 155123844,
+    image_url: require("../assets/images/koala.jpg"),
+    rating: 300
+  },
+  {
+    name: "topping up",
+    latitude: -37.81722,
+    longitude: 144.966132,
+    description: "girl filling up water bucket",
+    time_created: 155123844,
+    image_url: require("../assets/images/water_filling.jpg"),
+    rating: 301
+  },
+  {
+    name: "me and my homies",
+    latitude: -37.814898,
+    longitude: 144.974028,
+    description: "a couple of kids dressed as batman",
+    time_created: 155123844,
+    image_url: require("../assets/images/da_boys.jpg"),
+    rating: 350
+  },
+  {
+    name: "indigenous child",
+    latitude: -37.813033,
+    longitude: 144.972398,
+    description: "portrait of an indigenous Australian child",
+    time_created: 155123844,
+    image_url: require("../assets/images/indigenous.jpg"),
+    rating: 67
+  },
   {
     name: "Hosier Lane",
     latitude: -37.816215,
@@ -67,7 +181,7 @@ export default class HomeScreen extends React.Component {
         }}
       >
         {this.state.markers.map((m, index) => (
-          <Marker
+          <MapMarker
             coordinate={{
               latitude: m.latitude,
               longitude: m.longitude
@@ -77,13 +191,11 @@ export default class HomeScreen extends React.Component {
             key={index}
           >
             <CustomMarker image_url={m.image_url} />
-          </Marker>
+          </MapMarker>
         ))}
       </MapView>
     );
   }
-
-  //<Image style={{ height: 50, width: 50 }} source={image} />
 
   componentWillMount() {
     this._getLocationAsync();
