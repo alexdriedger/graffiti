@@ -8,7 +8,9 @@ import {
   View
 } from "react-native";
 import MapViewDirections from "react-native-maps-directions";
-import { MapView, Location, Permissions } from "expo";
+import { MapView, OverlayComponent, Location, Permissions } from "expo";
+import ActionButton from "react-native-action-button";
+import { MaterialIcons } from "@expo/vector-icons";
 
 import CustomMarker from "../components/CustomMarker";
 import MapMarker from "../components/MapMarker";
@@ -210,18 +212,13 @@ export default class HomeScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    // let waypoints = markers.slice(0, 4).map(m => {
-    //   return {
-    //     latitude: m.latitude,
-    //     longitude: m.longitude
-    //   };
-    // });
     this.state = {
       ...initialRegion,
       markers: [],
+      markersById: {},
       waypoints: null
     };
-    console.log(this.state);
+    // console.log(this.state);
   }
 
   async componentDidMount() {
@@ -237,48 +234,76 @@ export default class HomeScreen extends React.Component {
       console.log("Failed to fetch data");
       json = defaultMarkers;
     }
-    console.log(json);
+    // console.log(json);
     let markers = [];
+    let markersById = {};
     json.forEach(element => {
-      console.log(element);
+      // console.log(element);
       let key = Object.keys(element)[0];
       let obj = element[key];
-      console.log("This is the object");
-      console.log(obj);
+      obj["visible"] = true;
+      // console.log("This is the object");
+      // console.log(obj);
       markers.push(obj);
+      markersById[key] = obj;
     });
-    this.setState({ markers: markers });
+    this.setState({ markers: markers, markersById: markersById });
+    // console.log("markersById");
+    // console.log(this.state.markersById);
   }
 
   render() {
     return (
-      <MapView
-        showsUserLocation
-        style={{ flex: 1 }}
-        region={{
-          latitude: this.state.latitude,
-          longitude: this.state.longitude,
-          latitudeDelta: this.state.latitudeDelta,
-          longitudeDelta: this.state.longitudeDelta
-        }}
-      >
-        {this._renderDirections()}
-
-        {this.state.markers.map((m, index) => (
-          <MapMarker
-            coordinate={{
-              latitude: m.latitude,
-              longitude: m.longitude
-            }}
-            title={m.name}
-            description={m.description}
-            key={index}
-          >
-            <CustomMarker image_url={m.image_url} />
-          </MapMarker>
-        ))}
-      </MapView>
+      <View style={{ flex: 1, alignItems: "center" }}>
+        <MapView
+          showsUserLocation
+          style={{ ...StyleSheet.absoluteFillObject }}
+          region={{
+            latitude: this.state.latitude,
+            longitude: this.state.longitude,
+            latitudeDelta: this.state.latitudeDelta,
+            longitudeDelta: this.state.longitudeDelta
+          }}
+        >
+          {this._renderDirections(this.state.waypoints)}
+          {this._renderMarkers(this.state.markersById)}
+        </MapView>
+        {this._renderFloationActionButton(this._renderFloationActionButton())}
+      </View>
     );
+  }
+
+  _getWaypoints(points) {
+    // console.log("getWaypoints state");
+    // console.log(this.state.markersById);
+    // console.log("_getWaypoints");
+    // console.log(this.state.markers);
+    let waypoints = points.map(p => {
+      return {
+        latitude: this.state.markersById[p].latitude,
+        longitude: this.state.markersById[p].longitude
+      };
+    });
+
+    // Make other points invisible
+    let toBeInvisible = { ...this.state.markersById };
+    for (id in toBeInvisible) {
+      toBeInvisible[id].visible = false;
+    }
+    points.forEach(p => (toBeInvisible[p].visible = true));
+
+    // console.log("waypoints");
+    // console.log(waypoints);
+    this.setState({
+      waypoints: waypoints,
+      latitude: waypoints[0].latitude,
+      longitude: waypoints[0].longitude,
+      latitudeDelta: 0.03,
+      longitudeDelta: 0.01,
+      markersById: toBeInvisible
+    });
+    // console.log("end of _getWaypoints");
+    // console.log(this.state.markersById);
   }
 
   componentWillMount() {
@@ -289,22 +314,115 @@ export default class HomeScreen extends React.Component {
     if (waypoints !== null) {
       return (
         <MapViewDirections
-          origin={{
-            latitude: this.state.latitude,
-            longitude: this.state.longitude
-          }}
-          destination={{
-            latitude: this.state.latitude,
-            longitude: this.state.longitude
-          }}
-          waypoints={this.state.waypoints}
+          origin={waypoints[0]}
+          destination={waypoints[0]}
+          waypoints={waypoints}
           mode={"walking"}
           apikey={"AIzaSyDebH3jJ_9Z7i-22j9AQZuJYZG5apEJobc"}
-          strokeWidth={3}
+          strokeWidth={5}
           strokeColor="#4A89F3"
         />
       );
     }
+  }
+
+  _renderMarkers(markersById) {
+    // console.log("renderMarkers");
+    // console.log(this.state.markersById);
+    let visible = [];
+    if (Object.keys(markersById).length !== 0) {
+      for (key in markersById) {
+        // console.log(key);
+        let o = markersById[key];
+        // console.log(o);
+        if (o["visible"]) {
+          // console.log("pushed");
+          visible.push(o);
+        }
+      }
+    }
+
+    // console.log("pre return renderMarkers");
+    // console.log(this.state.markersById);
+    // console.log("visible");
+    // console.log(visible);
+
+    return this.state.markers.map((m, index) => (
+      <MapMarker
+        coordinate={{
+          latitude: m.latitude,
+          longitude: m.longitude
+        }}
+        title={m.name}
+        description={m.description}
+        key={index}
+      >
+        <CustomMarker image_url={m.image_url} />
+      </MapMarker>
+    ));
+  }
+
+  _renderFloationActionButton() {
+    // red - rgba(231,76,60,1)
+    if (this.state.waypoints !== null) {
+      return (
+        <ActionButton
+          buttonColor="rgba(231, 76, 60, 1)"
+          renderIcon={active => {
+            if (active) {
+              return (
+                <MaterialIcons
+                  name="keyboard-arrow-left"
+                  size={32}
+                  color="white"
+                  degrees={180}
+                />
+              );
+            }
+            return <MaterialIcons name="clear" size={32} color="white" />;
+          }}
+        >
+          <ActionButton.Item
+            buttonColor="rgba(231, 76, 60, 1)"
+            title="Cancel"
+            onPress={() => {
+              let toBeVisible = { ...this.state.markersById };
+              for (id in toBeVisible) {
+                toBeVisible[id].visible = true;
+              }
+              this.setState({ markersById: toBeVisible, waypoints: null });
+            }}
+          >
+            <MaterialIcons name="delete" size={32} color="white" />
+          </ActionButton.Item>
+        </ActionButton>
+      );
+    }
+    return (
+      <ActionButton
+        buttonColor="#3498db"
+        renderIcon={() => (
+          <MaterialIcons name="navigation" size={32} color="white" />
+        )}
+      >
+        <ActionButton.Item
+          buttonColor="#9b59b6"
+          title="CBD Tour"
+          onPress={() =>
+            this._getWaypoints(["201", "202", "203", "204", "12", "15", "14"])
+          }
+        >
+          <MaterialIcons name="business" size={32} color="white" />
+        </ActionButton.Item>
+        <ActionButton.Item
+          buttonColor="#1abc9c"
+          title="Fitzroy Tour"
+          onPress={() => this._getWaypoints(["101", "102", "103", "104"])}
+        >
+          <MaterialIcons name="store" size={32} color="white" />
+        </ActionButton.Item>
+      </ActionButton>
+    );
   }
 
   _getLocationAsync = async () => {
@@ -316,7 +434,7 @@ export default class HomeScreen extends React.Component {
     }
 
     let location = await Location.getCurrentPositionAsync({});
-    console.log(location);
+    // console.log(location);
     this.setState({
       longitude: location.coords.longitude,
       latitude: location.coords.latitude
