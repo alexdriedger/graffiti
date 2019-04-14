@@ -212,19 +212,13 @@ export default class HomeScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    // let waypoints = markers.slice(0, 4).map(m => {
-    //   return {
-    //     latitude: m.latitude,
-    //     longitude: m.longitude
-    //   };
-    // });
     this.state = {
       ...initialRegion,
       markers: [],
       markersById: {},
       waypoints: null
     };
-    console.log(this.state);
+    // console.log(this.state);
   }
 
   async componentDidMount() {
@@ -274,43 +268,16 @@ export default class HomeScreen extends React.Component {
           {this._renderDirections(this.state.waypoints)}
           {this._renderMarkers(this.state.markersById)}
         </MapView>
-        <ActionButton
-          buttonColor="rgba(231,76,60,1)"
-          renderIcon={() => (
-            <MaterialIcons name="navigation" size={32} color="white" />
-          )}
-        >
-          <ActionButton.Item
-            buttonColor="#9b59b6"
-            title="Custom Tour"
-            onPress={() => console.log("Custom Tour button pressed")}
-          >
-            <MaterialIcons name="mood" size={32} color="white" />
-          </ActionButton.Item>
-          <ActionButton.Item
-            buttonColor="#3498db"
-            title="CBD Tour"
-            onPress={() =>
-              this._getWaypoints(["201", "202", "203", "204", "12", "15", "14"])
-            }
-          >
-            <MaterialIcons name="business" size={32} color="white" />
-          </ActionButton.Item>
-          <ActionButton.Item
-            buttonColor="#1abc9c"
-            title="Fitzroy Tour"
-            onPress={() => this._getWaypoints(["101", "102", "103", "104"])}
-          >
-            <MaterialIcons name="store" size={32} color="white" />
-          </ActionButton.Item>
-        </ActionButton>
+        {this._renderFloationActionButton(this._renderFloationActionButton())}
       </View>
     );
   }
 
   _getWaypoints(points) {
-    console.log("getWaypoints state");
-    console.log(this.state.markersById);
+    // console.log("getWaypoints state");
+    // console.log(this.state.markersById);
+    // console.log("_getWaypoints");
+    // console.log(this.state.markers);
     let waypoints = points.map(p => {
       return {
         latitude: this.state.markersById[p].latitude,
@@ -325,8 +292,8 @@ export default class HomeScreen extends React.Component {
     }
     points.forEach(p => (toBeInvisible[p].visible = true));
 
-    console.log("waypoints");
-    console.log(waypoints);
+    // console.log("waypoints");
+    // console.log(waypoints);
     this.setState({
       waypoints: waypoints,
       latitude: waypoints[0].latitude,
@@ -335,6 +302,8 @@ export default class HomeScreen extends React.Component {
       longitudeDelta: 0.01,
       markersById: toBeInvisible
     });
+    // console.log("end of _getWaypoints");
+    // console.log(this.state.markersById);
   }
 
   componentWillMount() {
@@ -358,17 +327,27 @@ export default class HomeScreen extends React.Component {
   }
 
   _renderMarkers(markersById) {
+    // console.log("renderMarkers");
+    // console.log(this.state.markersById);
     let visible = [];
     if (Object.keys(markersById).length !== 0) {
       for (key in markersById) {
+        // console.log(key);
         let o = markersById[key];
+        // console.log(o);
         if (o["visible"]) {
+          // console.log("pushed");
           visible.push(o);
         }
       }
     }
 
-    return visible.map((m, index) => (
+    // console.log("pre return renderMarkers");
+    // console.log(this.state.markersById);
+    // console.log("visible");
+    // console.log(visible);
+
+    return this.state.markers.map((m, index) => (
       <MapMarker
         coordinate={{
           latitude: m.latitude,
@@ -383,6 +362,69 @@ export default class HomeScreen extends React.Component {
     ));
   }
 
+  _renderFloationActionButton() {
+    // red - rgba(231,76,60,1)
+    if (this.state.waypoints !== null) {
+      return (
+        <ActionButton
+          buttonColor="rgba(231, 76, 60, 1)"
+          renderIcon={active => {
+            if (active) {
+              return (
+                <MaterialIcons
+                  name="keyboard-arrow-left"
+                  size={32}
+                  color="white"
+                  degrees={180}
+                />
+              );
+            }
+            return <MaterialIcons name="clear" size={32} color="white" />;
+          }}
+        >
+          <ActionButton.Item
+            buttonColor="rgba(231, 76, 60, 1)"
+            title="Cancel"
+            onPress={() => {
+              let toBeVisible = { ...this.state.markersById };
+              for (id in toBeVisible) {
+                toBeVisible[id].visible = true;
+              }
+              this.setState({ markersById: toBeVisible, waypoints: null });
+            }}
+          >
+            <MaterialIcons name="delete" size={32} color="white" />
+          </ActionButton.Item>
+        </ActionButton>
+      );
+    }
+    return (
+      <ActionButton
+        buttonColor="#3498db"
+        renderIcon={() => (
+          <MaterialIcons name="navigation" size={32} color="white" />
+        )}
+      >
+        <ActionButton.Item
+          buttonColor="#9b59b6"
+          title="CBD Tour"
+          onPress={() =>
+            this._getWaypoints(["201", "202", "203", "204", "12", "15", "14"])
+          }
+        >
+          <MaterialIcons name="business" size={32} color="white" />
+        </ActionButton.Item>
+        <ActionButton.Item
+          buttonColor="#1abc9c"
+          title="Fitzroy Tour"
+          onPress={() => this._getWaypoints(["101", "102", "103", "104"])}
+        >
+          <MaterialIcons name="store" size={32} color="white" />
+        </ActionButton.Item>
+      </ActionButton>
+    );
+  }
+
   _getLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== "granted") {
@@ -392,7 +434,7 @@ export default class HomeScreen extends React.Component {
     }
 
     let location = await Location.getCurrentPositionAsync({});
-    console.log(location);
+    // console.log(location);
     this.setState({
       longitude: location.coords.longitude,
       latitude: location.coords.latitude
